@@ -140,7 +140,7 @@ async def run_pipeline(cfg: Config, args) -> int:
             candidates: List[str] = []  # url
             provenance_map: Dict[str, RepoInfo] = {}
             for repo in repos:
-                outcome = await scanner.scan(repo.full_name, repo.branch)
+                outcome = await scanner.scan(repo)
                 top = scanner.top_files(outcome.entries, cfg.MAX_FILES_PER_REPO)
                 for path in top:
                     url = raw_url_for(repo, path)
