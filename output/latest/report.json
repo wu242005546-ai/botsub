@@ -1,0 +1,16 @@
+{
+  "run_id": "20260907T065051Z-9ebb",
+  "generated_at": "2026-09-07T06:50:55Z",
+  "exit_code": 0,
+  "repos_scanned": 0,
+  "candidates_found": 0,
+  "verified_total": 0,
+  "ok_total": 0,
+  "failed_total": 0,
+  "new_sources": 0,
+  "changed_sources": 0,
+  "dead_sources": 0,
+  "revived_sources": 0,
+  "source_stats": {},
+  "links": []
+}
