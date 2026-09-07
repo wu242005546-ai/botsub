@@ -26,6 +26,7 @@ env:
   PYTHON_VERSION: '3.10'
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+  GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
   QQ_EMAIL: ${{ secrets.QQ_EMAIL }}
   QQ_EMAIL_AUTH_CODE: ${{ secrets.QQ_EMAIL_AUTH_CODE }}
   TO_EMAIL: ${{ secrets.TO_EMAIL }}

@@ -25,6 +25,7 @@ from bot.domain import (
     AnalysisResult, ExtractionResult, Node, RepoInfo, SourceIdentity, VerificationResult,
 )
 from bot.fetcher import Fetcher
+from bot.foreign import ForeignClient, gitlab_raw_url, gitee_raw_url
 from bot.gh import GitHubClient
 from bot.notify import Notifier
 from bot.output import OutputWriter, RunReport
@@ -60,6 +61,11 @@ def log_setup(level: int = logging.INFO, output_dir: str = "output"):
 
 
 def raw_url_for(repo: RepoInfo, path: str) -> str:
+    host = getattr(repo, "host", "github")
+    if host == "gitlab":
+        return gitlab_raw_url(repo.full_name, repo.branch, path)
+    if host == "gitee":
+        return gitee_raw_url(repo.full_name, repo.branch, path)
     return f"https://raw.githubusercontent.com/{repo.full_name}/{repo.branch}/{path}"
 
 
@@ -112,12 +118,13 @@ async def run_pipeline(cfg: Config, args) -> int:
         timeout = aiohttp.ClientTimeout(total=cfg.REQUEST_TIMEOUT)
         async with aiohttp.ClientSession(timeout=timeout) as session:
             gh = GitHubClient(cfg, session)
+            foreign = ForeignClient(cfg, session)
             fetcher = Fetcher(cfg, session)
             verifier = Verifier(cfg, fetcher, store)
-            scanner = TreeScanner(cfg, gh)
+            scanner = TreeScanner(cfg, gh, foreign=foreign)
 
             # ---------- 1. discovery ----------
-            providers = build_providers(cfg, gh, store)
+            providers = build_providers(cfg, gh, store, foreign)
             seen: set = set()
             repos: List[RepoInfo] = []
             for prov in providers:

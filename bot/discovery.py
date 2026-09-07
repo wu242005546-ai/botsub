@@ -123,6 +123,33 @@ class GitHubDebugProvider(DiscoveryProvider):
 
 
 @dataclass
+class ForeignSearchProvider(DiscoveryProvider):
+    """GitLab / Gitee 搜索：无 GitHub 配额消耗。"""
+
+    cfg: Config
+    foreign: "ForeignClient"
+
+    async def discover(self, seen: set, limit: int) -> List[RepoInfo]:
+        out: List[RepoInfo] = []
+        for host in self.cfg.ENABLE_FOREIGN_HOSTS:
+            for keyword in self.cfg.SEARCH_KEYWORDS:
+                if len(out) >= limit:
+                    break
+                items = await self.foreign.search_repos(host, keyword, self.cfg.REPOS_PER_KEYWORD)
+                for repo in items:
+                    if repo.full_name in seen:
+                        continue
+                    seen.add(repo.full_name)
+                    out.append(repo)
+                    if len(out) >= limit:
+                        break
+                if items:
+                    logger.info("foreign[%s] keyword=%s hits=%d total=%d",
+                                host, keyword, len(items), len(out))
+        return out[:limit]
+
+
+@dataclass
 class HistoryProvider(DiscoveryProvider):
     """从 state.db 历史中召回曾经的活跃仓库（对"不再命中关键词但仍有价值"的源友好）。"""
 
@@ -146,10 +173,12 @@ class HistoryProvider(DiscoveryProvider):
         return out[:limit]
 
 
-def build_providers(cfg: Config, gh: GitHubClient, store) -> List[DiscoveryProvider]:
+def build_providers(cfg: Config, gh: GitHubClient, store, foreign: "ForeignClient") -> List[DiscoveryProvider]:
     providers: List[DiscoveryProvider] = []
     if cfg.DEBUG_REPOSITORIES:
         providers.append(GitHubDebugProvider(cfg=cfg, gh=gh))
     providers.append(GitHubSearchProvider(cfg=cfg, gh=gh))
+    if foreign is not None and cfg.ENABLE_FOREIGN_HOSTS:
+        providers.append(ForeignSearchProvider(cfg=cfg, foreign=foreign))
     providers.append(HistoryProvider(cfg=cfg, gh=gh, store=store))
     return providers

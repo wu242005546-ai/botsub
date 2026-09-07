@@ -50,6 +50,10 @@ class Config:
     REPOS_PER_KEYWORD: int = field(default_factory=lambda: _env_int("REPOS_PER_KEYWORD", 3))
     MAX_REPOS_TOTAL: int = field(default_factory=lambda: _env_int("MAX_REPOS_TOTAL", 40))
     SEARCH_PUSHED_DAYS: int = field(default_factory=lambda: _env_int("SEARCH_PUSHED_DAYS", 30))
+    # 启用 GitLab / Gitee 作为额外无配额来源
+    ENABLE_FOREIGN_HOSTS: List[str] = field(default_factory=lambda: _env_list(
+        "ENABLE_FOREIGN_HOSTS", "gitlab,gitee"))
+    GITEE_TOKEN: str = field(default_factory=lambda: _env("GITEE_TOKEN"))
     # 调试/白名单：优先扫描（不消耗搜索配额）
     DEBUG_REPOSITORIES: List[str] = field(default_factory=lambda: _env_list("DEBUG_REPOSITORIES"))
 

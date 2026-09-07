@@ -49,22 +49,35 @@ def _flatten_tree_entries(entries: List[dict]) -> List[str]:
 
 
 class TreeScanner:
-    """树的递归扫描 + truncated fallback。"""
+    """树的递归扫描 + truncated fallback。按 host 分派：github -> Trees API，foreign -> 各自 REST。"""
 
-    def __init__(self, cfg: Config, gh: GitHubClient):
+    def __init__(self, cfg: Config, gh: GitHubClient, foreign=None):
         self.cfg = cfg
         self.gh = gh
+        self.foreign = foreign
 
-    async def scan(self, full_name: str, branch: str) -> TreeScanOutcome:
+    async def scan(self, repo) -> TreeScanOutcome:
         """主路径：Trees API recursive。truncated 时目录 fallback。"""
-        outcome = await self.gh.get_tree(full_name, branch)
+        host = getattr(repo, "host", "github")
+        if host != "github":
+            if self.foreign is None:
+                return TreeScanOutcome(entries=[], truncated=False)
+            outcome = await self.foreign.get_tree(host, repo.full_name, repo.branch)
+            if outcome is None:
+                return TreeScanOutcome(entries=[], truncated=False)
+            paths = _flatten_tree_entries(outcome.entries)
+            if outcome.truncated:
+                logger.warning("[%s] %s tree truncated (foreign host fallback unsupported)", host, repo.full_name)
+            return TreeScanOutcome(entries=paths, truncated=False)
+
+        outcome = await self.gh.get_tree(repo.full_name, repo.branch)
         if outcome is None:
             return TreeScanOutcome(entries=[], truncated=False)
         entries = _flatten_tree_entries(outcome.entries)
         if not outcome.truncated:
             return TreeScanOutcome(entries=entries, truncated=False)
-        logger.warning("[%s] tree truncated -> directory fallback", full_name)
-        fallback = await self._directory_walk(full_name, branch)
+        logger.warning("[%s] tree truncated -> directory fallback", repo.full_name)
+        fallback = await self._directory_walk(repo.full_name, repo.branch)
         merged = list(dict.fromkeys(entries + fallback))
         return TreeScanOutcome(entries=merged, truncated=False)
 

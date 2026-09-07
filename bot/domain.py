@@ -70,7 +70,8 @@ class RepoInfo:
     branch: str
     default_branch: str
     pushed_at: str = ""
-    provenance: str = "search"  # search / debug / history
+    provenance: str = "search"  # search / debug / history / gitlab / gitee
+    host: str = "github"  # github / gitlab / gitee
 
 
 @dataclass
