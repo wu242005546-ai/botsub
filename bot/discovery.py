@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from typing import List
 
 from bot.gh import GitHubClient
@@ -31,7 +32,8 @@ class GitHubSearchProvider(DiscoveryProvider):
     async def _query(self, keyword: str) -> str:
         qualifiers = ["fork:false"]
         if self.cfg.SEARCH_PUSHED_DAYS:
-            qualifiers.append(f"pushed:>={self.cfg.SEARCH_PUSHED_DAYS}d")
+            since = (datetime.utcnow() - timedelta(days=self.cfg.SEARCH_PUSHED_DAYS)).strftime("%Y-%m-%d")
+            qualifiers.append(f"pushed:>={since}")
         return f"{keyword} {' '.join(qualifiers)}"
 
     async def _graphql_fallback(self, keyword: str, per_page: int) -> List[RepoInfo]:
