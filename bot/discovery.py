@@ -8,6 +8,7 @@ from typing import List
 
 from bot.gh import GitHubClient
 from bot.domain import RepoInfo
+from bot.store import Store
 from config import Config
 
 logger = logging.getLogger("discovery")
@@ -124,7 +125,8 @@ class HistoryProvider(DiscoveryProvider):
     """从 state.db 历史中召回曾经的活跃仓库（对"不再命中关键词但仍有价值"的源友好）。"""
 
     cfg: Config
-    store
+    gh: GitHubClient
+    store: Store
 
     async def discover(self, seen: set, limit: int) -> List[RepoInfo]:
         out: List[RepoInfo] = []
@@ -147,5 +149,5 @@ def build_providers(cfg: Config, gh: GitHubClient, store) -> List[DiscoveryProvi
     if cfg.DEBUG_REPOSITORIES:
         providers.append(GitHubDebugProvider(cfg=cfg, gh=gh))
     providers.append(GitHubSearchProvider(cfg=cfg, gh=gh))
-    providers.append(HistoryProvider(cfg=cfg, store=store))
+    providers.append(HistoryProvider(cfg=cfg, gh=gh, store=store))
     return providers
