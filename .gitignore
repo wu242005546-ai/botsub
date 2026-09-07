@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# 运行时产物（内容缓存不入库）
+output/_content_cache/
+output/run.log
+
+# 敏感：节点 raw 内容、凭据绝不入库、不入 git
+output/sub_nodes_raw.txt
+
+# 日志/瞬态
+*.log
+.DS_Store
