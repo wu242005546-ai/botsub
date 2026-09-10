@@ -1,10 +1,7 @@
+https://raw.githubusercontent.com/svinakraft-maker/FlareFeed/main/public/clash.yaml
+https://gitlab.com/tunnel-projects/clash-freemium/-/raw/main/proxy_provider/akun.yaml
+https://gitlab.com/my740/clash/-/raw/main/config.yaml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/Clash.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ClashMeta.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ShadowRocket.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/mihomo.yml
-https://raw.githubusercontent.com/lim12137/clash-node-pool/main/output/candidates.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/fast/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/secure/clash.yaml
-https://gitlab.com/tunnel-projects/clash-freemium/-/raw/main/proxy_provider/akun.yaml
-https://gitlab.com/my740/clash/-/raw/main/config.yaml
