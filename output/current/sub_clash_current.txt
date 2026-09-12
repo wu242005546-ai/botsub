@@ -1,7 +1,5 @@
-https://raw.githubusercontent.com/ovmvo/FreeSub/main/sub/permanent/mihomo.yaml
-https://raw.githubusercontent.com/ovmvo/FreeSub/main/sub/latest/15686499.yaml
-https://raw.githubusercontent.com/ovmvo/FreeSub/main/sub/raw/04.yaml
-https://raw.githubusercontent.com/ovmvo/FreeSub/main/sub/raw/03.yaml
+https://raw.githubusercontent.com/lim12137/clash-node-pool/main/output/candidates.yaml
 https://gitlab.com/tunnel-projects/clash-freemium/-/raw/main/proxy_provider/akun.yaml
-https://raw.githubusercontent.com/ovmvo/FreeSub/refs/heads/main/sub/raw/03.yaml
-https://raw.githubusercontent.com/ovmvo/FreeSub/refs/heads/main/sub/raw/04.yaml
+https://gitlab.com/my740/clash/-/raw/main/config.yaml
+https://raw.githubusercontent.com/lim12137/clash-node-pool/main/output/config.yaml
+https://raw.githubusercontent.com/lim12137/clash-node-pool/main/output/proxies.yaml
