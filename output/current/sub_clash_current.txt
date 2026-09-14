@@ -1,6 +1,3 @@
-https://raw.githubusercontent.com/svinakraft-maker/FlareFeed/main/public/clash.yaml
-https://raw.githubusercontent.com/lim12137/clash-node-pool/main/output/candidates.yaml
+https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/subscribe/clash.yml
 https://gitlab.com/tunnel-projects/clash-freemium/-/raw/main/proxy_provider/akun.yaml
 https://gitlab.com/my740/clash/-/raw/main/config.yaml
-https://raw.githubusercontent.com/lim12137/clash-node-pool/main/output/config.yaml
-https://raw.githubusercontent.com/lim12137/clash-node-pool/main/output/proxies.yaml
