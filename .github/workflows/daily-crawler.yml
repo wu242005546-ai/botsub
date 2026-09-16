@@ -30,6 +30,8 @@ env:
   QQ_EMAIL: ${{ secrets.QQ_EMAIL }}
   QQ_EMAIL_AUTH_CODE: ${{ secrets.QQ_EMAIL_AUTH_CODE }}
   TO_EMAIL: ${{ secrets.TO_EMAIL }}
+  # 公开频道用户名，逗号分隔，如 "freenode_share,clashnode"；不是密钥，用 Variables 而非 Secrets 也可以
+  TELEGRAM_CHANNELS: ${{ vars.TELEGRAM_CHANNELS }}
 
 jobs:
   crawl:

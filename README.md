@@ -17,6 +17,7 @@ bot/
   analyze.py             分类 + 确定性打分 + 指纹
   discovery.py           Provider 协议：GitHub(Search/GraphQL/Debug/History)
   gh.py                  GitHub REST/GraphQL 客户端 + 配额预算
+  telegram.py            Telegram 公开频道扫描（t.me/s/ 预览页，无需 Bot Token）
   tree_scan.py           Trees API 递归扫描 + truncated 目录 fallback
   verify.py              验证（独立验证缓存 + TTL）
   store.py               SQLite state.db（生命周期状态机）
@@ -32,6 +33,7 @@ tests/self_test.py       离线自检（不联网）
 | 能力 | 说明 |
 |---|---|
 | 发现 | 关键词搜索 GitHub 仓库 + 历史召回 + 调试白名单；REST 搜索失败自动 GraphQL 兜底 |
+| Telegram | 扫描 `TELEGRAM_CHANNELS` 配置的公开频道预览页；频道内的外部订阅链接并入常规发现池按正常流程验活，频道内直接贴的裸节点链接只做语法校验、单独输出（见下方说明），不需要 Bot Token |
 | 扫描 | Trees API `recursive=1` 一次拿全仓库文件；`truncated=true` 时强制目录遍历 fallback（绝不静默少扫） |
 | 提取 | 仓库里高分文件解析出订阅/节点；内嵌的裸订阅链接补进候选池 |
 | 统一获取 | 同一次 run 内同一 canonical URL 只会真实请求一次（Fetcher memo + 内容缓存） |
@@ -79,6 +81,11 @@ tests/self_test.py       离线自检（不联网）
    | `QQ_EMAIL` | 是 | 发件 QQ 邮箱（如 `1234@qq.com`） |
    | `QQ_EMAIL_AUTH_CODE` | 是 | QQ 邮箱 SMTP 授权码（非登录密码，QQ 邮箱设置里生成） |
    | `TO_EMAIL` | 是 | 收件邮箱 |
+
+   如果要用 Telegram 公开频道扫描,再去 Settings → Secrets and variables → Actions → **Variables** 标签页(不是 Secrets,频道名不是密钥)添加:
+   | Variable | 必填 | 说明 |
+   |---|---|---|
+   | `TELEGRAM_CHANNELS` | 否 | 公开频道用户名,逗号分隔,`@`可省略,如 `freenode_share,clashnode`；留空则完全不扫描,零开销。**不需要 Bot Token/API ID**——用的是频道自带的公开预览页 `t.me/s/<channel>`，只能扫公开频道 |
 3. Actions 页会自动出现 **Daily Sub Crawl** 工作流（`workflow_dispatch` 手动触发，或等每日 cron）。
 4. 工作流结束后会自动 commit `output/state.db` + `output/current` + `output/latest`（内容缓存不提交），并上传 artifact。
 
@@ -95,7 +102,8 @@ output/
   current/
     sub_clash_current.txt   # 通过验证的 Clash 订阅
     sub_v2ray_current.txt   # 通过验证的 v2ray 订阅
-    sub_nodes_current.txt   # 通过验证的裸节点源
+    sub_nodes_current.txt   # 通过验证的裸节点源(目前流水线里此分支恒为空,保留字段)
+    sub_telegram_nodes_current.txt  # Telegram频道直接贴出的裸节点链接(仅语法校验,未二次验活)
   latest/
     report.json             # 本次 run 汇总
     manifest.json           # 输出文件 sha256

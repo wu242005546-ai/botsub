@@ -57,6 +57,11 @@ class Config:
     # 调试/白名单：优先扫描（不消耗搜索配额）
     DEBUG_REPOSITORIES: List[str] = field(default_factory=lambda: _env_list("DEBUG_REPOSITORIES"))
 
+    # ---------- Telegram ----------
+    # 公开频道用户名列表（逗号分隔，@可省略），如 "freenode_share,clashnode"
+    # 为空则完全跳过，不产生任何请求。不需要 Bot Token（走公开预览页 t.me/s/<channel>）。
+    TELEGRAM_CHANNELS: List[str] = field(default_factory=lambda: _env_list("TELEGRAM_CHANNELS"))
+
     # ---------- 扫描 ----------
     MAX_TREE_FALLBACK_DEPTH: int = field(default_factory=lambda: _env_int("MAX_TREE_FALLBACK_DEPTH", 3))
     MAX_FILES_PER_REPO: int = field(default_factory=lambda: _env_int("MAX_FILES_PER_REPO", 25))

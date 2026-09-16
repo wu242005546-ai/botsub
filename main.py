@@ -33,6 +33,7 @@ from bot.parse.base64_chain import decode_chain, is_likely_b64
 from bot.parse.clash_yaml import parse_clash_yaml, looks_like_clash
 from bot.parse.node_list import parse_nodes
 from bot.store import Store
+from bot.telegram import scan_all_channels
 from bot.tree_scan import TreeScanner
 from bot.verify import Verifier
 
@@ -187,7 +188,29 @@ async def run_pipeline(cfg: Config, args) -> int:
                     link = SourceIdentity.normalize(link)
                     if link and link not in discovered_links and link not in candidates:
                         discovered_links.append(link)
-            logger.info("extracted %d files, found %d embedded links",
+
+            # ---------- 3.5 telegram 公开频道 ----------
+            # 频道没有"文件树"可扫，产出分两类（原因见 bot/telegram.py 顶部注释）：
+            #   - 消息里的外部订阅链接 -> 和仓库文件里扫出的内嵌链接同构，汇入同一个 discovered_links，
+            #     照常走"打分 -> HTTP验活 -> 输出"流程，不搞特殊。
+            #   - 消息里直接贴的裸节点链接 -> 没有外部资源可重新拉取验活，不硬塞进 verify.py，
+            #     只做语法校验后单独写 sub_telegram_nodes_current.txt。
+            telegram_raw_nodes: List[str] = []
+            tg_scans = await scan_all_channels(cfg, session)
+            for scan in tg_scans:
+                for link in scan.sub_links:
+                    link = SourceIdentity.normalize(link)
+                    if link and link not in discovered_links and link not in candidates:
+                        discovered_links.append(link)
+                for node_uri in scan.raw_nodes:
+                    if node_uri not in telegram_raw_nodes:
+                        telegram_raw_nodes.append(node_uri)
+            if tg_scans:
+                logger.info("telegram: %d channels, %d raw nodes, %d sub links merged",
+                            len(tg_scans), len(telegram_raw_nodes),
+                            sum(len(s.sub_links) for s in tg_scans))
+
+            logger.info("extracted %d files, found %d embedded links (incl. telegram)",
                         len(results), len(discovered_links))
 
             # ---------- 4. analyze / score ----------
@@ -263,6 +286,8 @@ async def run_pipeline(cfg: Config, args) -> int:
             # ---------- 7. output ----------
             clash_urls, v2ray_urls, proto_urls = group_urls(ok_results)
             manifest = writer.write_current(clash_urls, v2ray_urls, proto_urls)
+            if telegram_raw_nodes:
+                manifest["sub_telegram_nodes_current.txt"] = writer.write_telegram_nodes(telegram_raw_nodes)
 
             all_fail = [r.target.canonical for r in vres if not r.ok]
             failed_total = len(all_fail)

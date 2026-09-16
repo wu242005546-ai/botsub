@@ -66,6 +66,19 @@ class OutputWriter:
             manifest[name] = hashlib.sha256(body.encode("utf-8")).hexdigest()[:16]
         return manifest
 
+    def write_telegram_nodes(self, raw_nodes: List[str]) -> str:
+        """output/current/sub_telegram_nodes_current.txt：Telegram频道里直接贴出的裸节点链接。
+
+        这些链接只做过语法校验（协议格式对不对），没有像其它输出那样被重新拉取验活
+        ——因为它们本身就是终点数据，没有"外部资源"可供二次请求。当作普通节点列表
+        订阅源接入 subs-check 之类的下游工具时，存活与否由下游自己的测活环节负责。
+        返回内容的 sha256（用于 manifest）。
+        """
+        body = "\n".join(dict.fromkeys(raw_nodes)) + ("\n" if raw_nodes else "")
+        p = os.path.join(self.current, "sub_telegram_nodes_current.txt")
+        _atomic_write(p, body)
+        return hashlib.sha256(body.encode("utf-8")).hexdigest()[:16]
+
     def write_latest(self, report: RunReport) -> None:
         report_path = os.path.join(self.latest, "report.json")
         _atomic_write(report_path, json.dumps(

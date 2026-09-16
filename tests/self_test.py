@@ -92,6 +92,32 @@ def test_fingerprint_deterministic():
     assert a.fingerprint() != c.fingerprint()
 
 
+def test_telegram_extract():
+    from bot.telegram import _extract_from_text, _strip_html
+
+    def _vmess(host: str) -> str:
+        import base64
+        return "vmess://" + base64.urlsafe_b64encode(
+            ('{"v":"2","add":"%s","port":"443","id":"x","ps":"s"}' % host).encode()
+        ).decode()
+
+    text = (
+        "今日更新一批节点\n"
+        + _vmess("1.2.3.4") + "\n"
+        + "trojan://pw@5.6.7.8:8443?security=tls\n"
+        + "这条是坏的: vless://not-a-valid-one\n"
+        + "订阅: https://example.com/sub.txt 记得测速"
+    )
+    nodes, links = _extract_from_text(text)
+    assert any(n.startswith("vmess://") for n in nodes), nodes
+    assert any(n.startswith("trojan://") for n in nodes), nodes
+    assert not any("not-a-valid-one" in n for n in nodes), "格式不对的vless不该通过校验"
+    assert links == ["https://example.com/sub.txt"], links
+
+    html_fragment = 'line1<br>line2 &amp; more'
+    assert _strip_html(html_fragment) == "line1\nline2 & more"
+
+
 def test_store_lifecycle():
     import tempfile
     from bot.store import Store
