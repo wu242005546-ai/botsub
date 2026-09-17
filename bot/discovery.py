@@ -151,7 +151,12 @@ class ForeignSearchProvider(DiscoveryProvider):
 
 @dataclass
 class HistoryProvider(DiscoveryProvider):
-    """从 state.db 历史中召回曾经的活跃仓库（对"不再命中关键词但仍有价值"的源友好）。"""
+    """从 state.db 历史中召回曾经的活跃仓库（对"不再命中关键词但仍有价值"的源友好）。
+
+    这是防止 output/current 每天被新搜索结果"挤丢"旧的、仍然存活的源的关键一环：
+    单独给它保底名额（HISTORY_REPOS_LIMIT），并且按 last_seen 最久未被扫到的优先，
+    这样 177 个历史仓库能在若干天内轮转完一遍，而不是每天都只召回同一批最近的。
+    """
 
     cfg: Config
     gh: GitHubClient
@@ -159,8 +164,14 @@ class HistoryProvider(DiscoveryProvider):
 
     async def discover(self, seen: set, limit: int) -> List[RepoInfo]:
         out: List[RepoInfo] = []
-        repos = self.store.get_history_repos(self.cfg.MAX_REPOS_TOTAL)
+        budget = min(limit, self.cfg.HISTORY_REPOS_LIMIT)
+        if budget <= 0:
+            return out
+        # 取比 budget 多一些，跳过已在 seen 里的之后仍有余量可用
+        repos = self.store.get_history_repos(self.cfg.MAX_REPOS_TOTAL * 3, order="oldest_first")
         for full_name, pushed in repos:
+            if len(out) >= budget:
+                break
             if full_name in seen:
                 continue
             meta = await self.gh.get_repo(full_name)
@@ -170,6 +181,43 @@ class HistoryProvider(DiscoveryProvider):
             seen.add(full_name)
             out.append(RepoInfo(full_name=full_name, branch=db, default_branch=db,
                                 pushed_at=meta.get("pushed_at") or pushed or "", provenance="history"))
+        return out
+
+
+@dataclass
+class GitHubCodeSearchProvider(DiscoveryProvider):
+    """按协议 scheme 字符串搜文件内容（/search/code），命中的是真正含节点的仓库。
+
+    仓库搜索（GitHubSearchProvider）只匹配仓库名/描述/README，vmess:// 这类字符串
+    放在那边命中率很低；code search 直接搜文件正文，效果好得多。
+    """
+
+    cfg: Config
+    gh: GitHubClient
+
+    async def discover(self, seen: set, limit: int) -> List[RepoInfo]:
+        out: List[RepoInfo] = []
+        for keyword in self.cfg.CODE_SEARCH_KEYWORDS:
+            if len(out) >= limit:
+                break
+            items = await self.gh.search_code(f'"{keyword}"', self.cfg.REPOS_PER_KEYWORD)
+            hits = 0
+            for it in items:
+                repo_meta = it.get("repository") or {}
+                full = repo_meta.get("full_name", "")
+                if not full or full in seen:
+                    continue
+                meta = await self.gh.get_repo(full)
+                if not meta:
+                    continue
+                db = meta.get("default_branch") or "main"
+                seen.add(full)
+                out.append(RepoInfo(full_name=full, branch=db, default_branch=db,
+                                    pushed_at=meta.get("pushed_at") or "", provenance="code_search"))
+                hits += 1
+                if len(out) >= limit:
+                    break
+            logger.info("code_search keyword=%s hits=%d total=%d", keyword, hits, len(out))
         return out[:limit]
 
 
@@ -177,8 +225,11 @@ def build_providers(cfg: Config, gh: GitHubClient, store, foreign: "ForeignClien
     providers: List[DiscoveryProvider] = []
     if cfg.DEBUG_REPOSITORIES:
         providers.append(GitHubDebugProvider(cfg=cfg, gh=gh))
+    # History 排前面且有独立保底名额：优先保证"已知活跃源"每天被复检，不被当天新搜索挤掉。
+    providers.append(HistoryProvider(cfg=cfg, gh=gh, store=store))
     providers.append(GitHubSearchProvider(cfg=cfg, gh=gh))
+    if cfg.CODE_SEARCH_KEYWORDS:
+        providers.append(GitHubCodeSearchProvider(cfg=cfg, gh=gh))
     if foreign is not None and cfg.ENABLE_FOREIGN_HOSTS:
         providers.append(ForeignSearchProvider(cfg=cfg, foreign=foreign))
-    providers.append(HistoryProvider(cfg=cfg, gh=gh, store=store))
     return providers

@@ -45,10 +45,17 @@ class Config:
     REQUEST_DELAY: float = field(default_factory=lambda: _env_int("REQUEST_DELAY", 0.3))
 
     # ---------- 搜索 ----------
+    # 仓库级搜索（只匹配 repo 名/描述/README，不匹配文件内容）：用描述性词汇，
+    # 协议 scheme 字符串（vmess:// 等）挪到 CODE_SEARCH_KEYWORDS 走 code search，命中率高得多。
     SEARCH_KEYWORDS: List[str] = field(default_factory=lambda: _env_list(
-        "SEARCH_KEYWORDS", "node_list,free clash,vmess://,vless://,trojan://,ss://,subscribe,subscription,clash"))
-    REPOS_PER_KEYWORD: int = field(default_factory=lambda: _env_int("REPOS_PER_KEYWORD", 3))
-    MAX_REPOS_TOTAL: int = field(default_factory=lambda: _env_int("MAX_REPOS_TOTAL", 40))
+        "SEARCH_KEYWORDS", "node_list,free clash,free v2ray,free nodes,subscribe,subscription,clash config,v2ray config"))
+    # 代码内容搜索关键词：匹配文件内容里的协议链接，命中的就是真正含节点的文件所在仓库
+    CODE_SEARCH_KEYWORDS: List[str] = field(default_factory=lambda: _env_list(
+        "CODE_SEARCH_KEYWORDS", "vmess://,vless://,trojan://,ss://"))
+    REPOS_PER_KEYWORD: int = field(default_factory=lambda: _env_int("REPOS_PER_KEYWORD", 5))
+    MAX_REPOS_TOTAL: int = field(default_factory=lambda: _env_int("MAX_REPOS_TOTAL", 70))
+    # 每天保留给"召回历史已知活跃仓库"的名额（防止被当天新搜索挤没，导致输出反复丢失已验证过的源）
+    HISTORY_REPOS_LIMIT: int = field(default_factory=lambda: _env_int("HISTORY_REPOS_LIMIT", 30))
     SEARCH_PUSHED_DAYS: int = field(default_factory=lambda: _env_int("SEARCH_PUSHED_DAYS", 30))
     # 启用 GitLab / Gitee 作为额外无配额来源
     ENABLE_FOREIGN_HOSTS: List[str] = field(default_factory=lambda: _env_list(
@@ -71,7 +78,7 @@ class Config:
     # ---------- 验证 ----------
     VERIFY_SUBSCRIPTIONS: bool = field(default_factory=lambda: _env_bool("VERIFY_SUBSCRIPTIONS", True))
     MIN_VALID_NODES: int = field(default_factory=lambda: _env_int("MIN_VALID_NODES", 3))
-    MAX_VERIFY_CANDIDATES: int = field(default_factory=lambda: _env_int("MAX_VERIFY_CANDIDATES", 80))
+    MAX_VERIFY_CANDIDATES: int = field(default_factory=lambda: _env_int("MAX_VERIFY_CANDIDATES", 150))
     MIN_SCORE_TO_VERIFY: int = field(default_factory=lambda: _env_int("MIN_SCORE_TO_VERIFY", 25))
     MAX_CONCURRENT_VERIFY: int = field(default_factory=lambda: _env_int("MAX_CONCURRENT_VERIFY", 12))
     VERIFY_TIMEOUT: int = field(default_factory=lambda: _env_int("VERIFY_TIMEOUT", 20))

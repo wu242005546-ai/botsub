@@ -205,10 +205,12 @@ class Store:
             row = self.conn.execute("SELECT * FROM sources WHERE url=?", (url,)).fetchone()
             return dict(row) if row else None
 
-    def get_history_repos(self, limit: int = 40) -> List[Tuple[str, str]]:
+    def get_history_repos(self, limit: int = 40, order: str = "newest_first") -> List[Tuple[str, str]]:
+        """order='oldest_first' 按 last_seen 最久未被扫到的优先，用于历史仓库轮转覆盖。"""
+        direction = "ASC" if order == "oldest_first" else "DESC"
         with self._lock:
             rows = self.conn.execute(
-                "SELECT full_name, last_seen FROM repos_history ORDER BY last_seen DESC LIMIT ?",
+                f"SELECT full_name, last_seen FROM repos_history ORDER BY last_seen {direction} LIMIT ?",
                 (limit,),
             ).fetchall()
             return [(r["full_name"], r["last_seen"]) for r in rows]

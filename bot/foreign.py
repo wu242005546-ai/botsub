@@ -9,6 +9,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import urllib.parse
 from typing import List, Optional
@@ -41,10 +42,15 @@ class ForeignClient:
         self.session = session
         self._headers = {"Accept": "application/json", "User-Agent": "sub-bot-v2"}
 
-    async def _get_json(self, url: str, params: Optional[dict] = None):
+    async def _get_json(self, url: str, params: Optional[dict] = None, _retried: bool = False):
         try:
             async with self.session.get(url, headers=self._headers, params=params) as resp:
                 if resp.status != 200:
+                    # GitLab 未鉴权公开搜索经常间歇性 500，重试一次再放弃
+                    if resp.status >= 500 and not _retried:
+                        logger.info("foreign GET %s -> %s, retrying once", url, resp.status)
+                        await asyncio.sleep(1.5)
+                        return await self._get_json(url, params, _retried=True)
                     logger.warning("foreign GET %s -> %s", url, resp.status)
                     return None
                 try:
