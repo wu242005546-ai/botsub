@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -96,6 +97,7 @@ class GitHubSearchProvider(DiscoveryProvider):
                 if len(out) >= limit:
                     break
             logger.info("keyword=%s hits=%d total=%d", keyword, len(want), len(out))
+            await asyncio.sleep(self.cfg.REQUEST_DELAY)
         return out[:limit]
 
 
@@ -197,6 +199,9 @@ class GitHubCodeSearchProvider(DiscoveryProvider):
 
     async def discover(self, seen: set, limit: int) -> List[RepoInfo]:
         out: List[RepoInfo] = []
+        # 紧跟在 GitHubSearchProvider 的多次 /search/repositories 调用后面，
+        # 两者共用 GitHub 的 search 速率桶，不留间隔会立刻触发 secondary rate limit（429）。
+        await asyncio.sleep(self.cfg.REQUEST_DELAY * 3)
         for keyword in self.cfg.CODE_SEARCH_KEYWORDS:
             if len(out) >= limit:
                 break
@@ -218,6 +223,7 @@ class GitHubCodeSearchProvider(DiscoveryProvider):
                 if len(out) >= limit:
                     break
             logger.info("code_search keyword=%s hits=%d total=%d", keyword, hits, len(out))
+            await asyncio.sleep(self.cfg.REQUEST_DELAY * 2)
         return out[:limit]
 
 
