@@ -19,6 +19,15 @@ GOOD_FILE_NAMES = {
 }
 BAD_FILE_NAMES = {"readme", "license", "changelog", "package", "requirements", "lock", "gitignore", "docker"}
 BAD_DIRS = {".git", "node_modules", "dist", "build", "venv", ".venv", "vendor", ".github", "test", "tests"}
+# 程序源码后缀：不管路径里有没有 "subscription"/"config" 这种关键词都直接排除。
+# 起因：code search 会命中"实现了代理协议解析"的项目本身（比如某个 Rust/Go 写的代理客户端），
+# 它的源文件路径天然长得像 src/subscription/uri.rs、src/config/xray.rs，
+# 关键词打分会把这类源码误判成订阅文件——但里面是解析逻辑/测试用例里的示例链接，不是真节点。
+BAD_EXTENSIONS = {
+    ".rs", ".py", ".go", ".js", ".ts", ".jsx", ".tsx", ".java", ".c", ".cpp", ".cc", ".h", ".hpp",
+    ".rb", ".php", ".swift", ".kt", ".kts", ".cs", ".m", ".mm", ".scala", ".sh", ".ps1", ".lua",
+    ".dart", ".vue", ".html", ".htm", ".css", ".scss", ".md", ".rst", ".toml", ".gradle", ".proto",
+}
 
 
 def score_path(path: str) -> int:
@@ -26,6 +35,8 @@ def score_path(path: str) -> int:
     low = path.lower()
     base = low.split("/")[-1]
     if any(b in base for b in BAD_FILE_NAMES):
+        return -100
+    if any(low.endswith(ext) for ext in BAD_EXTENSIONS):
         return -100
     parts = set(low.replace("/", " ").replace("_", " ").replace("-", " ").split())
     if parts & BAD_DIRS:
