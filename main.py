@@ -292,7 +292,7 @@ async def run_pipeline(cfg: Config, args) -> int:
 
             # ---------- 7.5 push subscriptions to dedicated repo ----------
             pusher = SubscriptionPusher(cfg, session)
-            raw_sub_urls = await pusher.push_subscriptions(
+            raw_sub_urls = pusher.push_subscriptions(
                 clash_urls, v2ray_urls, proto_urls, telegram_raw_nodes
             )
 
