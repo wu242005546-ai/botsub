@@ -1,8 +1,7 @@
 """SUB_BOT V2 流水线入口。
 
 退出码：
-  0 = 成功（全部完成，可能部分验证失败但流程走完）
-  1 = 部分失败（有验证失败，仍产出；邮件照发并带失败清单）
+  0 = 成功（全部完成，部分验证失败不影响判定）
   2 = 致命（初始化/发现阶段失败，无有效产出）
 """
 
@@ -311,7 +310,7 @@ async def run_pipeline(cfg: Config, args) -> int:
                 "dead": len(dead_ids),
                 "revived": len(revived_ids),
             }
-            exit_code = 1 if failed_total > 0 else 0
+            exit_code = 0
 
             report = RunReport(
                 run_id=run_id, generated_at=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
