@@ -32,8 +32,7 @@ env:
   TO_EMAIL: ${{ secrets.TO_EMAIL }}
   # 公开频道用户名，逗号分隔，如 "freenode_share,clashnode"；不是密钥，用 Variables 而非 Secrets 也可以
   TELEGRAM_CHANNELS: ${{ vars.TELEGRAM_CHANNELS }}
-  # 订阅推送目标仓库（不是密钥，用 Variables）
-  SUB_REPO_OWNER: ${{ vars.SUB_REPO_OWNER }}
+  # 订阅推送目标仓库名（默认 botsub）
   SUB_REPO_NAME: ${{ vars.SUB_REPO_NAME }}
   SUB_REPO_BRANCH: ${{ vars.SUB_REPO_BRANCH }}
 
@@ -78,15 +77,14 @@ jobs:
         if: always()
         run: |
           git pull --rebase --autostash || true
-          git add output/state.db output/current output/latest
+          git add output/state.db output/current output/latest sub_clash.txt sub_v2ray.txt sub_nodes.txt sub_telegram.txt
           if ! git diff --cached --quiet; then
-            git commit -m "chore(bot): daily crawl $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git commit -m "chore(subs): update subscriptions $(date -u +%Y-%m-%dT%H:%M:%SZ)"
             git push
           else
             echo "no changes to commit"
           fi
         env:
-          # 允许 push 回当前 repo
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifacts
