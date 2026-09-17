@@ -137,17 +137,25 @@ class ForeignSearchProvider(DiscoveryProvider):
     async def discover(self, seen: set, limit: int) -> List[RepoInfo]:
         out: List[RepoInfo] = []
         limit = min(limit, self.cfg.FOREIGN_REPOS_LIMIT)
-        for host in self.cfg.ENABLE_FOREIGN_HOSTS:
+        hosts = self.cfg.ENABLE_FOREIGN_HOSTS
+        if not hosts:
+            return out
+        # 每个 host 自己的份额，否则排在前面的 host（比如 gitlab）会把整个 limit 吃满，
+        # 后面的 host（gitee）连一次搜索机会都拿不到——实测发生过。
+        per_host_limit = max(1, limit // len(hosts))
+        for host in hosts:
+            host_out = []
             for keyword in self.cfg.SEARCH_KEYWORDS:
-                if len(out) >= limit:
+                if len(host_out) >= per_host_limit or len(out) >= limit:
                     break
                 items = await self.foreign.search_repos(host, keyword, self.cfg.REPOS_PER_KEYWORD)
                 for repo in items:
                     if repo.full_name in seen:
                         continue
                     seen.add(repo.full_name)
+                    host_out.append(repo)
                     out.append(repo)
-                    if len(out) >= limit:
+                    if len(host_out) >= per_host_limit or len(out) >= limit:
                         break
                 if items:
                     logger.info("foreign[%s] keyword=%s hits=%d total=%d",
