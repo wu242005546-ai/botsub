@@ -32,6 +32,10 @@ env:
   TO_EMAIL: ${{ secrets.TO_EMAIL }}
   # 公开频道用户名，逗号分隔，如 "freenode_share,clashnode"；不是密钥，用 Variables 而非 Secrets 也可以
   TELEGRAM_CHANNELS: ${{ vars.TELEGRAM_CHANNELS }}
+  # 订阅推送目标仓库（不是密钥，用 Variables）
+  SUB_REPO_OWNER: ${{ vars.SUB_REPO_OWNER }}
+  SUB_REPO_NAME: ${{ vars.SUB_REPO_NAME }}
+  SUB_REPO_BRANCH: ${{ vars.SUB_REPO_BRANCH }}
 
 jobs:
   crawl:

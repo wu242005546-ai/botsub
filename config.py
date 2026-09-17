@@ -95,6 +95,12 @@ class Config:
     # 无新增时仍发送每日摘要
     NOTIFY_ALWAYS: bool = field(default_factory=lambda: _env_bool("NOTIFY_ALWAYS", True))
 
+    # ---------- 订阅推送 ----------
+    # 将验证后的订阅推送到独立 GitHub 仓库，供 subs-check / V2RAYN 通过 raw URL 订阅
+    SUB_REPO_OWNER: str = field(default_factory=lambda: _env("SUB_REPO_OWNER"))
+    SUB_REPO_NAME: str = field(default_factory=lambda: _env("SUB_REPO_NAME"))
+    SUB_REPO_BRANCH: str = field(default_factory=lambda: _env("SUB_REPO_BRANCH", "main"))
+
     @property
     def email_enabled(self) -> bool:
         return bool(self.QQ_EMAIL and self.QQ_EMAIL_AUTH_CODE and self.TO_EMAIL)

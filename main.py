@@ -34,6 +34,7 @@ from bot.parse.clash_yaml import parse_clash_yaml, looks_like_clash
 from bot.parse.node_list import parse_nodes
 from bot.store import Store
 from bot.telegram import scan_all_channels
+from bot.push import SubscriptionPusher
 from bot.tree_scan import TreeScanner
 from bot.verify import Verifier
 
@@ -289,6 +290,12 @@ async def run_pipeline(cfg: Config, args) -> int:
             if telegram_raw_nodes:
                 manifest["sub_telegram_nodes_current.txt"] = writer.write_telegram_nodes(telegram_raw_nodes)
 
+            # ---------- 7.5 push subscriptions to dedicated repo ----------
+            pusher = SubscriptionPusher(cfg, session)
+            raw_sub_urls = await pusher.push_subscriptions(
+                clash_urls, v2ray_urls, proto_urls, telegram_raw_nodes
+            )
+
             all_fail = [r.target.canonical for r in vres if not r.ok]
             failed_total = len(all_fail)
             stats = store.stats()
@@ -339,6 +346,10 @@ async def run_pipeline(cfg: Config, args) -> int:
                 if not new_ids and not all_fail:
                     lines += "\n(no new sources this run)"
                 lines += "\n\nAll links: " + "\n".join(clash_urls + v2ray_urls)
+                if raw_sub_urls:
+                    lines += "\n\nRaw subscription URLs:"
+                    for fname, url in raw_sub_urls.items():
+                        lines += f"\n  {fname}: {url}"
                 notifier.send(subject, notifier.build_summary(subject, lines.split("\n")))
 
             store.finish_run(run_id, exit_code, summary)
