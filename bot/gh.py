@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import time
 import urllib.parse
@@ -70,7 +71,8 @@ class GitHubClient:
         if cfg.GITHUB_TOKEN:
             self._headers["Authorization"] = f"Bearer {cfg.GITHUB_TOKEN}"
 
-    async def _get(self, url: str, params: Optional[Dict] = None, resource: str = "core") -> Optional[Dict]:
+    async def _get(self, url: str, params: Optional[Dict] = None, resource: str = "core",
+                   _retried: bool = False) -> Optional[Dict]:
         self.budget.wait_if_needed(resource)
         try:
             async with self.session.get(url, headers=self._headers, params=params) as resp:
@@ -83,7 +85,20 @@ class GitHubClient:
                 if resp.status == 404:
                     return None
                 if resp.status in (403, 429):
-                    logger.warning("rate/limit hit on %s => %s", url, resp.status)
+                    # 403/429 在 search 资源上常是"secondary rate limit"（突发请求触发的滑动窗限流），
+                    # 跟 x-ratelimit-remaining 没关系，重试前必须真的停够；优先看 Retry-After。
+                    if not _retried:
+                        retry_after = resp.headers.get("retry-after")
+                        try:
+                            wait = float(retry_after) if retry_after else 20.0
+                        except ValueError:
+                            wait = 20.0
+                        wait = min(max(wait, 5.0), 60.0)
+                        logger.warning("rate/limit hit on %s => %s, waiting %.0fs then retrying once",
+                                       url, resp.status, wait)
+                        await asyncio.sleep(wait)
+                        return await self._get(url, params, resource, _retried=True)
+                    logger.warning("rate/limit hit on %s => %s (after retry, giving up)", url, resp.status)
                     return None
                 logger.warning("GET %s -> %s", url, resp.status)
                 return None

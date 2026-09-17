@@ -196,7 +196,12 @@ async def run_pipeline(cfg: Config, args) -> int:
             #   - 消息里直接贴的裸节点链接 -> 没有外部资源可重新拉取验活，不硬塞进 verify.py，
             #     只做语法校验后单独写 sub_telegram_nodes_current.txt。
             telegram_raw_nodes: List[str] = []
-            tg_scans = await scan_all_channels(cfg, session)
+            try:
+                tg_scans = await scan_all_channels(cfg, session)
+            except Exception as e:
+                # Telegram 是锦上添花的可选来源，不能因为它挂掉就丢了 GitHub/GitLab 已经扫到的整个当天产出
+                logger.warning("telegram scan failed, continuing without it: %s", e)
+                tg_scans = []
             for scan in tg_scans:
                 for link in scan.sub_links:
                     link = SourceIdentity.normalize(link)

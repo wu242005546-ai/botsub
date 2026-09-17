@@ -97,7 +97,9 @@ class GitHubSearchProvider(DiscoveryProvider):
                 if len(out) >= limit:
                     break
             logger.info("keyword=%s hits=%d total=%d", keyword, len(want), len(out))
-            await asyncio.sleep(self.cfg.REQUEST_DELAY)
+            # GitHub /search 端点对突发请求有独立于总配额的 secondary rate limit，
+            # 8~9 个关键词几秒内打完很容易触发；官方建议 search 请求间隔 >= 1s。
+            await asyncio.sleep(max(self.cfg.REQUEST_DELAY, 1.2))
         return out[:limit]
 
 
@@ -201,7 +203,7 @@ class GitHubCodeSearchProvider(DiscoveryProvider):
         out: List[RepoInfo] = []
         # 紧跟在 GitHubSearchProvider 的多次 /search/repositories 调用后面，
         # 两者共用 GitHub 的 search 速率桶，不留间隔会立刻触发 secondary rate limit（429）。
-        await asyncio.sleep(self.cfg.REQUEST_DELAY * 3)
+        await asyncio.sleep(3.0)
         for keyword in self.cfg.CODE_SEARCH_KEYWORDS:
             if len(out) >= limit:
                 break
@@ -223,7 +225,7 @@ class GitHubCodeSearchProvider(DiscoveryProvider):
                 if len(out) >= limit:
                     break
             logger.info("code_search keyword=%s hits=%d total=%d", keyword, hits, len(out))
-            await asyncio.sleep(self.cfg.REQUEST_DELAY * 2)
+            await asyncio.sleep(max(self.cfg.REQUEST_DELAY, 1.5))
         return out[:limit]
 
 

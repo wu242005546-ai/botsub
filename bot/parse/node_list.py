@@ -47,8 +47,18 @@ def parse_ss_url(u: str) -> Optional[Node]:
     # ss://base64(host:port) 或 ss://method:pass@host:port
     m = re.match(r"ss://([^@]+)@([^:]+):(\d+)", u)
     if m:
-        params = {"cipher": m.group(1).split(":")[0], "password": m.group(1).split(":", 1)[1]}
-        return _to_node("ss", m.group(2), int(m.group(3)), params, "")
+        userinfo = m.group(1)
+        # userinfo 有时是不带 ":" 的裸 base64（ss://<base64>@host:port 变体），不能假定一定能 split 出两段
+        if ":" not in userinfo:
+            userinfo = _b64url_decode(userinfo) or userinfo
+        if ":" not in userinfo:
+            return None
+        cipher, password = userinfo.split(":", 1)
+        params = {"cipher": cipher, "password": password}
+        try:
+            return _to_node("ss", m.group(2), int(m.group(3)), params, "")
+        except (ValueError, TypeError):
+            return None
     m = re.match(r"ss://([^#?]+)", u)
     if not m:
         return None

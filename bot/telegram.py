@@ -77,7 +77,13 @@ def _extract_from_text(text: str) -> Tuple[List[str], List[str]]:
         uri = m.group(0)
         validator = _VALIDATORS.get(proto)
         # hysteria2 目前 node_list.py 里没有独立校验函数，原样放行，交给下游 subs-check 自己测活
-        if validator is None or validator(uri) is not None:
+        try:
+            ok = validator is None or validator(uri) is not None
+        except Exception as e:
+            # 频道消息是不受信任的自由文本，格式千奇百怪；任何一条解析异常都不该拖垮整条流水线
+            logger.warning("node validator crashed on proto=%s uri=%s: %s", proto, uri[:80], e)
+            ok = False
+        if ok:
             raw_nodes.append(uri)
 
     sub_links: List[str] = []
