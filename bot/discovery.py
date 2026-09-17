@@ -75,6 +75,7 @@ class GitHubSearchProvider(DiscoveryProvider):
 
     async def discover(self, seen: set, limit: int) -> List[RepoInfo]:
         out: List[RepoInfo] = []
+        limit = min(limit, self.cfg.GITHUB_SEARCH_REPOS_LIMIT)
         for keyword in self.cfg.SEARCH_KEYWORDS:
             if len(out) >= limit:
                 break
@@ -135,6 +136,7 @@ class ForeignSearchProvider(DiscoveryProvider):
 
     async def discover(self, seen: set, limit: int) -> List[RepoInfo]:
         out: List[RepoInfo] = []
+        limit = min(limit, self.cfg.FOREIGN_REPOS_LIMIT)
         for host in self.cfg.ENABLE_FOREIGN_HOSTS:
             for keyword in self.cfg.SEARCH_KEYWORDS:
                 if len(out) >= limit:
@@ -201,6 +203,9 @@ class GitHubCodeSearchProvider(DiscoveryProvider):
 
     async def discover(self, seen: set, limit: int) -> List[RepoInfo]:
         out: List[RepoInfo] = []
+        limit = min(limit, self.cfg.CODE_SEARCH_REPOS_LIMIT)
+        if limit <= 0:
+            return out
         # 紧跟在 GitHubSearchProvider 的多次 /search/repositories 调用后面，
         # 两者共用 GitHub 的 search 速率桶，不留间隔会立刻触发 secondary rate limit（429）。
         await asyncio.sleep(3.0)

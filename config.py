@@ -53,9 +53,13 @@ class Config:
     CODE_SEARCH_KEYWORDS: List[str] = field(default_factory=lambda: _env_list(
         "CODE_SEARCH_KEYWORDS", "vmess://,vless://,trojan://,ss://"))
     REPOS_PER_KEYWORD: int = field(default_factory=lambda: _env_int("REPOS_PER_KEYWORD", 5))
-    MAX_REPOS_TOTAL: int = field(default_factory=lambda: _env_int("MAX_REPOS_TOTAL", 70))
-    # 每天保留给"召回历史已知活跃仓库"的名额（防止被当天新搜索挤没，导致输出反复丢失已验证过的源）
+    MAX_REPOS_TOTAL: int = field(default_factory=lambda: _env_int("MAX_REPOS_TOTAL", 100))
+    # 每个 Provider 每天的保底/上限名额：先到先得会导致 GitHubSearch 一家独占预算，
+    # 把 code search / GitLab / Gitee 挤到 0（实测发生过）。四路各自独立限额，互不挤占。
     HISTORY_REPOS_LIMIT: int = field(default_factory=lambda: _env_int("HISTORY_REPOS_LIMIT", 30))
+    GITHUB_SEARCH_REPOS_LIMIT: int = field(default_factory=lambda: _env_int("GITHUB_SEARCH_REPOS_LIMIT", 35))
+    CODE_SEARCH_REPOS_LIMIT: int = field(default_factory=lambda: _env_int("CODE_SEARCH_REPOS_LIMIT", 15))
+    FOREIGN_REPOS_LIMIT: int = field(default_factory=lambda: _env_int("FOREIGN_REPOS_LIMIT", 20))
     SEARCH_PUSHED_DAYS: int = field(default_factory=lambda: _env_int("SEARCH_PUSHED_DAYS", 30))
     # 启用 GitLab / Gitee 作为额外无配额来源
     ENABLE_FOREIGN_HOSTS: List[str] = field(default_factory=lambda: _env_list(
