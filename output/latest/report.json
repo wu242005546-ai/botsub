@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
   "run_id": "20260916T070000Z-ae2a",
   "generated_at": "2026-09-16T07:03:15Z",
   "exit_code": 1,
@@ -44,6 +45,53 @@
     "https://raw.githubusercontent.com/longlon/v2ray-config/main/Base64/Sub30_base64.txt",
     "https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/Countries/Bulgaria.txt",
     "https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/Countries/India.txt",
+=======
+  "run_id": "20260917T065518Z-b956",
+  "generated_at": "2026-09-17T06:58:39Z",
+  "exit_code": 1,
+  "repos_scanned": 40,
+  "candidates_found": 715,
+  "verified_total": 80,
+  "ok_total": 45,
+  "failed_total": 35,
+  "new_sources": 11,
+  "changed_sources": 29,
+  "dead_sources": 22,
+  "revived_sources": 0,
+  "source_stats": {
+    "ACTIVE": 179,
+    "DEAD": 52,
+    "FAILED": 154
+  },
+  "links": [
+    "https://raw.githubusercontent.com/Phirisyyds/free-vpn-clash-aggregator/main/output/clash-cn.yaml",
+    "https://raw.githubusercontent.com/Phirisyyds/free-vpn-clash-aggregator/main/output/clash.yaml",
+    "https://raw.githubusercontent.com/svinakraft-maker/FlareFeed/main/public/clash.yaml",
+    "https://gitlab.com/tunnel-projects/clash-freemium/-/raw/main/proxy_provider/akun.yaml",
+    "https://gitlab.com/my740/clash/-/raw/main/config.yaml",
+    "https://raw.githubusercontent.com/PuddinCat/BestClash/main/proxies.yaml",
+    "https://raw.githubusercontent.com/Au1rxx/free-vpn-subscriptions/main/output/clash.yaml",
+    "https://raw.githubusercontent.com/awesome-vpn/awesome-vpn/master/clash.yaml",
+    "https://raw.githubusercontent.com/vxiaov/free_proxies/main/clash/clash.provider.yaml",
+    "https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml",
+    "https://raw.githubusercontent.com/anaer/Sub/main/clash.yaml",
+    "https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/subscribe/clash.yml",
+    "https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.yml",
+    "https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/Clash.yml",
+    "https://raw.githubusercontent.com/iseeyoou26-wq/CryNet-SysTems-VPN-vless/main/subscriptions/vless_sub_1.txt",
+    "https://raw.githubusercontent.com/iseeyoou26-wq/CryNet-SysTems-VPN-vless/main/subscriptions/vless_sub_1_base64.txt",
+    "https://raw.githubusercontent.com/iseeyoou26-wq/CryNet-SysTems-VPN-vless/main/subscriptions/all.txt",
+    "https://raw.githubusercontent.com/iseeyoou26-wq/CryNet-SysTems-VPN-vless/main/subscriptions/archive.txt",
+    "https://raw.githubusercontent.com/iseeyoou26-wq/CryNet-SysTems-VPN-vless/main/subscriptions/archive_base64.txt",
+    "https://raw.githubusercontent.com/iseeyoou26-wq/CryNet-SysTems-VPN-vless/main/subscriptions/vless_all.txt",
+    "https://raw.githubusercontent.com/iseeyoou26-wq/CryNet-SysTems-VPN-vless/main/subscriptions/vless_archive.txt",
+    "https://raw.githubusercontent.com/iseeyoou26-wq/CryNet-SysTems-VPN-vless/main/subscriptions/vless_archive_base64.txt",
+    "https://raw.githubusercontent.com/iseeyoou26-wq/CryNet-SysTems-VPN-vless/main/subscriptions/vless_reality.txt",
+    "https://raw.githubusercontent.com/iseeyoou26-wq/CryNet-SysTems-VPN-vless/main/subscriptions/vless_reality_base64.txt",
+    "https://raw.githubusercontent.com/jafarm83/ConfigV2Ray/main/jafar.txt",
+    "https://raw.githubusercontent.com/svinakraft-maker/FlareFeed/main/public/Top500.txt",
+    "https://raw.githubusercontent.com/svinakraft-maker/FlareFeed/main/public/vless.txt",
+>>>>>>> Stashed changes
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-012.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-014.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-013.txt",
@@ -51,7 +99,11 @@
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-019.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-021.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-023.txt",
+<<<<<<< Updated upstream
     "https://raw.githubusercontent.com/iboxz/free-v2ray-collector/main/main/vless.txt",
+=======
+    "https://raw.githubusercontent.com/svinakraft-maker/FlareFeed/main/public/trojan.txt",
+>>>>>>> Stashed changes
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-008.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-009.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-011.txt",
@@ -61,10 +113,14 @@
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-018.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-020.txt",
     "https://raw.githubusercontent.com/ebrasha/free-v2ray-public-list/main/mixed-protocol-chunks/EbraSha-Mixed-Config-022.txt",
+<<<<<<< Updated upstream
     "https://raw.githubusercontent.com/iboxz/free-v2ray-collector/main/main/trojan.txt",
     "https://raw.githubusercontent.com/iboxz/free-v2ray-collector/main/main/vmess.txt",
     "https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/Countries/Estonia.txt",
     "https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/Countries/Czechia.txt",
     "https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/Countries/Austria.txt"
+=======
+    "https://raw.githubusercontent.com/svinakraft-maker/FlareFeed/main/public/vmess.txt"
+>>>>>>> Stashed changes
   ]
 }

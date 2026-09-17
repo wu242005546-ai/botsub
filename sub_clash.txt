@@ -1,14 +1,6 @@
-<<<<<<< Updated upstream
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/fast/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/light/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/secure/clash.yaml
-https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/Clash.yml
-=======
 https://raw.githubusercontent.com/Phirisyyds/free-vpn-clash-aggregator/main/output/clash-cn.yaml
 https://raw.githubusercontent.com/Phirisyyds/free-vpn-clash-aggregator/main/output/clash.yaml
 https://raw.githubusercontent.com/svinakraft-maker/FlareFeed/main/public/clash.yaml
->>>>>>> Stashed changes
 https://gitlab.com/tunnel-projects/clash-freemium/-/raw/main/proxy_provider/akun.yaml
 https://gitlab.com/my740/clash/-/raw/main/config.yaml
 https://raw.githubusercontent.com/PuddinCat/BestClash/main/proxies.yaml

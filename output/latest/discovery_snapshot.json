@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
   "run_id": "20260916T070000Z-ae2a",
   "repos": [
     "bitcoin-blake/awesome-bitcoin-blake",
@@ -22,6 +23,31 @@
     "soga11/clash-",
     "framecy/ClashHalo",
     "xxhh0822/clashdata",
+=======
+  "run_id": "20260917T065518Z-b956",
+  "repos": [
+    "hariompatidar-dev/wanderlust-airbnb-clone",
+    "ragesh28/ALL_CAREER",
+    "Vednat19/Wanderlust---Full-Stack-Travel-Listing-Web-Application",
+    "Phirisyyds/free-vpn-clash-aggregator",
+    "cbusifabcap/daily_free_vpn",
+    "Aminul-Islam7/rds4plus",
+    "jafarm83/ConfigV2Ray",
+    "svinakraft-maker/FlareFeed",
+    "Alvin9999-newpac/fanqiang",
+    "iseeyoou26-wq/CryNet-SysTems-VPN-vless",
+    "howlux72/Bullguard-Antivirus",
+    "deepakpal121095-dot/dp-glass-railing",
+    "nutted64-heap/Innocent-Assault-SS-Community-2026",
+    "AstroWaxDev/mypanel",
+    "jackbayliss/cloudflare-r2-rss",
+    "ponmani28/health-connect---flutter-",
+    "dfloriani/machine-connect",
+    "reve486/timecigar-restock-notify",
+    "aishhatkar119/youtube-merger",
+    "mmm1h/clashconfig",
+    "rburnett66/Pirate-Clashers",
+>>>>>>> Stashed changes
     "tunnel-projects/clash-freemium",
     "gangle01/freeclash",
     "free-the-v-bucks-codes/coc-download",
@@ -39,9 +65,16 @@
     "neonnetworkunblocker/ColorClash",
     "AlterSolutions/tornodes_lists",
     "hello-world-1989/cn-news",
+<<<<<<< Updated upstream
     "jackbayliss/cloudflare-r2-rss",
     "clash-lang/clash-compiler"
   ],
   "candidates": 241,
+=======
+    "ebrasha/free-v2ray-public-list",
+    "hustles-62242-pharaohs/Innocent-Assault-SS-Trainer-2026"
+  ],
+  "candidates": 310,
+>>>>>>> Stashed changes
   "verified": 80
 }
