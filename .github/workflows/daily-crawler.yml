@@ -32,6 +32,8 @@ env:
   TO_EMAIL: ${{ secrets.TO_EMAIL }}
   # 公开频道用户名，逗号分隔，如 "freenode_share,clashnode"；不是密钥，用 Variables 而非 Secrets 也可以
   TELEGRAM_CHANNELS: ${{ vars.TELEGRAM_CHANNELS }}
+  # gitlab,gitee -> 逗号分隔启用哪些境外搜索源；gitee 公开搜索接口对常见词长期返回空，默认关掉
+  ENABLE_FOREIGN_HOSTS: ${{ vars.ENABLE_FOREIGN_HOSTS }}
   # 订阅推送目标仓库名（默认 botsub）
   SUB_REPO_NAME: ${{ vars.SUB_REPO_NAME }}
   SUB_REPO_BRANCH: ${{ vars.SUB_REPO_BRANCH }}
