@@ -23,6 +23,8 @@ bot/
   store.py               SQLite state.db（生命周期状态机）
   output.py              current/（全量）+ latest/（报告/manifest/diff）
   notify.py              QQ SMTP 邮件
+  merge.py               聚合成品：多源合并去重，产出 base64 订阅 / 完整 Clash YAML
+  base_clash.yaml        Clash 成品的默认模板（proxy-groups / rules，可自行替换）
   parse/                 base64 链 / clash yaml / node 列表 纯解析
 tests/self_test.py       离线自检（不联网）
 .github/workflows/daily-crawler.yml  每日定时 + 手动触发
@@ -41,6 +43,7 @@ tests/self_test.py       离线自检（不联网）
 | 状态机 | 新源 NEW → ACTIVE；失败分级 FAILED(1次)/DEAD(3次)；复活 REVIVED（DEAD→ACTIVE）；久未再现 STALE |
 | 指纹 | canonicalize（去 fragment、还原 base64、统一大小写）→ SHA256；**密码/UUID 只进 hash，绝不落库、不入 git** |
 | 输出 | `current/` 全量快照 + `latest/report.json`（报告）+ `manifest.json`（哈希）+ `diff.json`（本次变化）；原子写（tmp→rename） |
+| 聚合 | 对外发布的 `sub_v2ray.txt`（base64）/ `sub_clash.txt`（完整 YAML）把**验证存活的多源合并去重**成终端客户端可直接导入的成品；源 URL 清单不丢，同步发布 `sub_v2ray_sources.txt` / `sub_clash_sources.txt`，聚合失败自动降级为源清单（优雅回退） |
 | 邮件 | 邮件正文带 run 摘要 + 新增/失败清单 + 全部链接；失败不影响 CI 判定 |
 | 退出码 | 0=成功；1=完成但有验证失败（仍产出）；2=致命（无有效产出）→ 驱动 CI 红/绿 |
 
@@ -87,7 +90,7 @@ tests/self_test.py       离线自检（不联网）
    |---|---|---|
    | `TELEGRAM_CHANNELS` | 否 | 公开频道用户名,逗号分隔,`@`可省略,如 `freenode_share,clashnode`；留空则完全不扫描,零开销。**不需要 Bot Token/API ID**——用的是频道自带的公开预览页 `t.me/s/<channel>`，只能扫公开频道 |
 3. Actions 页会自动出现 **Daily Sub Crawl** 工作流（`workflow_dispatch` 手动触发，或等每日 cron）。
-4. 工作流结束后会自动 commit `output/state.db` + `output/current` + `output/latest`（内容缓存不提交），并上传 artifact。
+4. 工作流结束后会自动 commit `output/state.db` + `output/current` + `output/latest` + 根目录的 `sub_*.txt`（内容缓存不提交），并上传 artifact。
 
 ### 3. 可选环境变量（用默认即开箱）
 
@@ -100,17 +103,34 @@ tests/self_test.py       离线自检（不联网）
 output/
   state.db                  # SQLite：跨 run 状态（含凭据指纹，不含明文）
   current/
-    sub_clash_current.txt   # 通过验证的 Clash 订阅
-    sub_v2ray_current.txt   # 通过验证的 v2ray 订阅
+    sub_clash_current.txt   # 通过验证的 clash 源 URL 清单（内部快照）
+    sub_v2ray_current.txt   # 通过验证的 v2ray 源 URL 清单（内部快照）
     sub_nodes_current.txt   # 通过验证的裸节点源(目前流水线里此分支恒为空,保留字段)
     sub_telegram_nodes_current.txt  # Telegram频道直接贴出的裸节点链接(仅语法校验,未二次验活)
   latest/
     report.json             # 本次 run 汇总
     manifest.json           # 输出文件 sha256
     diff.json               # 本次新增/变更/死亡/复活
+    merge.json              # 聚合统计（合并前/后节点数、截断、协议分布）
     discovery_snapshot.json # 本次发现的现场（可解释）
   run.log
 ```
+
+### 5. 对外发布的订阅文件（仓库根目录，raw URL 直接可订阅）
+
+> 这三个文件**不是**源 URL 清单，而是合并去重后的成品，终端客户端可直接订阅导入。
+
+| 文件 | 格式 | 用途 |
+|---|---|---|
+| `sub_v2ray.txt` | base64（内含 vmess/vless/ss/trojan 等节点 URI） | V2RAYN / v2rayNG 直接订阅导入 |
+| `sub_clash.txt` | 完整 Clash YAML（proxies + proxy-groups + rules） | Clash Verge / Mihomo 直接订阅导入 |
+| `sub_telegram.txt` | 频道裸节点 URI（去重，仅语法校验） | 直接导入；存活与否由下游测活 |
+| `sub_v2ray_sources.txt` | 本轮验证存活的 v2ray 源 URL 清单 | 想自取清单二次处理的人 |
+| `sub_clash_sources.txt` | 本轮验证存活的 clash 源 URL 清单 | 同上 |
+
+- Clash 成品由模板 `bot/base_clash.yaml` 拼出：合并的 proxies 注入模板，分组/规则策略完全由模板决定（`__ALL_NODES__` 占位符 = 全部合并后的节点名）；想调整分组策略只改模板，或换 `CLASH_BASE_TEMPLATE` 指向自己的模板。
+- 聚合去重键：v2ray 按"连接身份"（协议+主机+端口+凭据+传输参数，不含备注名）；clash 按"去掉 name 的 proxy dict"。同一节点被不同源改名发布会被合并成一条（保留首次出现的原文）。
+- 聚合阶段零额外网络：验证步骤已抓过各源，基于 Fetcher memo / 内容缓存回读。
 
 ## 安全
 

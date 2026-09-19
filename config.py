@@ -112,6 +112,14 @@ class Config:
     SUB_REPO_NAME: str = field(default_factory=lambda: _env("SUB_REPO_NAME", "botsub"))
     SUB_REPO_BRANCH: str = field(default_factory=lambda: _env("SUB_REPO_BRANCH", "main"))
 
+    # ---------- 聚合成品 ----------
+    # sub_v2ray.txt / sub_clash.txt 对外发布的是"把存活源合并去重后的成品"（base64 / YAML），
+    # 而不是源 URL 清单；源清单仍完整保留在 output/current/ 与 latest/report.json。
+    MAX_MERGED_NODES: int = field(default_factory=lambda: _env_int("MAX_MERGED_NODES", 2000))
+    # clash 成品由模板拼出来：proxies 合并进模板，proxy-groups/rules 完全由模板决定。
+    # 模板里用 __ALL_NODES__ 占位符标记"所有合并后的节点名"（可出现在任意 group 的 proxies 列表）。
+    CLASH_BASE_TEMPLATE: str = field(default_factory=lambda: _env("CLASH_BASE_TEMPLATE", "bot/base_clash.yaml"))
+
     @property
     def email_enabled(self) -> bool:
         return bool(self.QQ_EMAIL and self.QQ_EMAIL_AUTH_CODE and self.TO_EMAIL)

@@ -112,6 +112,11 @@ class OutputWriter:
         diff_path = os.path.join(self.latest, "diff.json")
         _atomic_write(diff_path, json.dumps(diff, ensure_ascii=False, indent=2))
 
+    def write_merge_stats(self, stats: dict) -> None:
+        """调试用：每次 run 的聚合成品统计（合并前/后节点数、截断、协议分布）。"""
+        p = os.path.join(self.latest, "merge.json")
+        _atomic_write(p, json.dumps(stats, ensure_ascii=False, indent=2))
+
     def write_discovery_snapshot(self, facts: dict) -> None:
         """调试用：每次 run 抓一次现场（可解释 diff 的来历）。"""
         p = os.path.join(self.latest, "discovery_snapshot.json")

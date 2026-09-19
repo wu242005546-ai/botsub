@@ -1,0 +1,29 @@
+# 聚合 Clash 成品的基础模板。
+# 每次 run：把验证存活的 clash 源的 proxies 合并去重后，注入本模板生成 sub_clash.txt。
+# 调整分组/规则策略只需改这个文件（或用 CLASH_BASE_TEMPLATE 指向你自己的模板）。
+#
+# 占位符 __ALL_NODES__：出现在某个 group 的 proxies 列表里时，会被替换成
+# "全部合并后的节点名"（列表内其余的项如 DIRECT / 自动选择会原样保留）。
+
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+
+proxy-groups:
+  - name: "🚀 节点选择"
+    type: select
+    proxies:
+      - "♻️ 自动选择"
+      - DIRECT
+      - __ALL_NODES__
+  - name: "♻️ 自动选择"
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    proxies:
+      - __ALL_NODES__
+
+rules:
+  - MATCH,🚀 节点选择

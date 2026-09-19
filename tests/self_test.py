@@ -137,6 +137,106 @@ def test_store_lifecycle():
     s.close()
 
 
+_BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def test_merge_v2ray():
+    import base64
+    from bot.merge import merge_v2ray
+
+    def _vmess(host: str, name: str) -> str:
+        import json
+        inner = json.dumps({"v": "2", "add": host, "port": "443", "id": "abc", "ps": name},
+                           separators=(",", ":"))
+        return "vmess://" + base64.b64encode(inner.encode()).decode()
+
+    src_a = "\n".join([
+        _vmess("1.2.3.4", "alpha"),
+        _vmess("5.6.7.8", "beta"),
+        "vless://uuid@8.8.8.8:443?security=tls#remark1",
+    ]) + "\n"
+    src_b = "\n".join([
+        _vmess("1.2.3.4", "renamed"),          # 与 alpha 同连接，只改了名字 -> 应被去重
+        "vless://uuid@8.8.8.8:443?security=tls#remark2",  # 同一节点不同备注 -> 去重
+        "ss://aes-256-cfb:secret@1.9.9.9:8443",
+    ]) + "\n"
+    srcs = [
+        ("https://raw.githubusercontent.com/a/b/main/x.txt", src_a.encode()),
+        ("https://raw.githubusercontent.com/c/d/main/y.txt", src_b.encode()),
+    ]
+    out, stats = merge_v2ray(srcs, 100)
+    assert stats["nodes_before_dedup"] == 6, stats
+    assert stats["merged"] == 4, stats
+    decoded = base64.b64decode(out).decode()
+    lines = decoded.strip().split("\n")
+    assert len(lines) == 4
+    assert _vmess("1.2.3.4", "alpha") in lines       # 保留首个原文（含原名备注）
+    assert _vmess("1.2.3.4", "renamed") not in lines  # 不保留改名副本
+    # 确定性：输入顺序无关
+    out2, _ = merge_v2ray(list(reversed(srcs)), 100)
+    assert out == out2
+
+
+def test_merge_clash():
+    import yaml
+    from bot.merge import merge_clash
+
+    y1 = """proxies:
+  - name: n1
+    type: vmess
+    server: 1.2.3.4
+    port: 443
+    uuid: abc
+    alterId: 0
+    cipher: auto
+  - name: n2
+    type: ss
+    server: 5.6.7.8
+    port: 8388
+    cipher: aes-256-gcm
+    password: secret
+"""
+    y2 = """proxies:
+  - name: n1-renamed
+    type: vmess
+    server: 1.2.3.4
+    port: 443
+    uuid: abc
+    alterId: 0
+    cipher: auto
+  - name: n3
+    type: trojan
+    server: 9.9.9.9
+    port: 443
+    password: pw
+"""
+    srcs = [
+        ("https://raw.githubusercontent.com/a/b/main/x.yaml", y1.encode()),
+        ("https://raw.githubusercontent.com/c/d/main/y.yaml", y2.encode()),
+    ]
+    out, stats = merge_clash(srcs, 100, os.path.join(_BASE_DIR, "bot", "base_clash.yaml"))
+    assert stats["proxies_before_dedup"] == 4, stats
+    assert stats["merged"] == 3, stats
+    doc = yaml.safe_load(out)
+    names = [p["name"] for p in doc["proxies"]]
+    assert len(names) == 3
+    assert "n1" in names and "n1-renamed" not in names
+    for g in doc.get("proxy-groups", []):
+        assert "__ALL_NODES__" not in g.get("proxies", [])
+        assert all(n in g["proxies"] for n in names)
+
+
+def test_merge_telegram():
+    from bot.merge import merge_telegram
+
+    uri = "vless://uuid@8.8.8.8:443?security=tls"
+    raw = [uri + "#remark1", uri + "#remark2",
+           "vmess://" + _b64url('{"v":"2","add":"1.2.3.4","port":"443","id":"x","ps":"s"}')]
+    out = merge_telegram(raw)
+    assert out.count("\n") >= 2
+    assert raw[0] in out and raw[1] not in out
+
+
 if __name__ == "__main__":
     for name, fn in sorted(globals().items()):
         if name.startswith("test_") and callable(fn):

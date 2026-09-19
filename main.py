@@ -294,11 +294,68 @@ async def run_pipeline(cfg: Config, args) -> int:
             if telegram_raw_nodes:
                 manifest["sub_telegram_nodes_current.txt"] = writer.write_telegram_nodes(telegram_raw_nodes)
 
-            # ---------- 7.5 push subscriptions to dedicated repo ----------
+            # ---------- 7.5 aggregate + push subscriptions ----------
+            # 对外发布的三个文件是"合并去重后的成品"，不是源 URL 清单：
+            #   sub_v2ray.txt    -> base64 节点订阅（V2RAYN 直接导入）
+            #   sub_clash.txt    -> 合并后的完整 Clash YAML（Clash Verge / Mihomo 直接导入）
+            #   sub_telegram.txt -> 频道裸节点 URI（去重）
+            # 源 URL 清单不丢：完整保留在 output/current/ + latest/report.json，并同步发布
+            # sub_v2ray_sources.txt / sub_clash_sources.txt。
+            # 聚合阶段零额外网络：验证步骤已抓过这些源，Fetcher memo / 内容缓存命中。
+            from bot.merge import merge_clash, merge_telegram, merge_v2ray, sources_list_text
+
             pusher = SubscriptionPusher(cfg, session)
-            raw_sub_urls = pusher.push_subscriptions(
-                clash_urls, v2ray_urls, proto_urls, telegram_raw_nodes
-            )
+            products: Dict[str, str] = {}
+            merge_stats: Dict[str, dict] = {}
+
+            async def ok_content(kind: str) -> List[Tuple[str, bytes]]:
+                srcs: List[Tuple[str, bytes]] = []
+                for res, rkind in ok_results:
+                    if rkind != kind or not res.ok:
+                        continue
+                    fres = await fetcher.fetch(res.target.canonical, use_cache=True)
+                    if fres.status == 200 and fres.data:
+                        srcs.append((res.target.canonical, fres.data))
+                return srcs
+
+            async def build_product(product_name: str, sources_name: str,
+                                    fallback_urls: List[str], kind: str) -> Tuple[str, dict]:
+                """聚合单个成品；失败/空 -> 优雅降级为源 URL 清单，保证 CI 不红、旧订阅可用。"""
+                srcs = await ok_content(kind)
+                body, stats = "", {"source": f"none ({len(srcs)})"}
+                if srcs:
+                    try:
+                        if kind == "clash":
+                            body, stats = merge_clash(srcs, cfg.MAX_MERGED_NODES, cfg.CLASH_BASE_TEMPLATE)
+                        else:
+                            body, stats = merge_v2ray(srcs, cfg.MAX_MERGED_NODES)
+                    except Exception as e:
+                        logger.exception("merge %s failed: %s", product_name, e)
+                        body, stats = "", {"source": f"error: {e}"}
+                if body:
+                    products[product_name] = body
+                    products[sources_name] = sources_list_text([u for u, _ in srcs])
+                    return body, stats
+                products[product_name] = sources_list_text(fallback_urls)
+                return "", stats
+
+            try:
+                if clash_urls:
+                    _, merge_stats["sub_clash.txt"] = await build_product(
+                        "sub_clash.txt", "sub_clash_sources.txt", clash_urls, "clash")
+                if v2ray_urls:
+                    _, merge_stats["sub_v2ray.txt"] = await build_product(
+                        "sub_v2ray.txt", "sub_v2ray_sources.txt", v2ray_urls, "v2ray")
+                if telegram_raw_nodes:
+                    products["sub_telegram.txt"] = merge_telegram(telegram_raw_nodes)
+            except Exception as e:
+                # 聚合/logic 整体兜底：绝不让成品输出步骤挂着整个 run。
+                logger.exception("aggregate step failed, falling back to source lists: %s", e)
+                products["sub_v2ray.txt"] = sources_list_text(v2ray_urls)
+                products["sub_clash.txt"] = sources_list_text(clash_urls)
+
+            raw_sub_urls = pusher.push_subscriptions(products)
+            writer.write_merge_stats(merge_stats)
 
             all_fail = [r.target.canonical for r in vres if not r.ok]
             failed_total = len(all_fail)
@@ -314,6 +371,7 @@ async def run_pipeline(cfg: Config, args) -> int:
                 "changed": len(changed_ids),
                 "dead": len(dead_ids),
                 "revived": len(revived_ids),
+                "merge": merge_stats,
             }
             exit_code = 0
 

@@ -65,10 +65,7 @@ def parse_clash_yaml(text: str) -> Tuple[List[Node], List[str]]:
         return [], []
     nodes: List[Node] = []
     raw_urls: List[str] = []
-    try:
-        doc = yaml.safe_load(text)
-    except Exception:
-        return [], []
+    doc = _safe_load(text)
     if not isinstance(doc, dict):
         return [], []
 
@@ -90,6 +87,29 @@ def parse_clash_yaml(text: str) -> Tuple[List[Node], List[str]]:
                 if n:
                     nodes.append(n)
     return nodes, raw_urls
+
+
+def parse_clash_proxies_raw(text: str) -> List[dict]:
+    """返回 YAML 中 `proxies:` 段的原始 proxy dict 列表（用于聚合成品，保留完整字段）。
+
+    只处理内联 proxies；proxy-providers 指向的外部订阅不属于本文件内容，不递归。
+    """
+    if yaml is None:
+        return []
+    doc = _safe_load(text)
+    if not isinstance(doc, dict):
+        return []
+    proxies = doc.get("proxies")
+    if not isinstance(proxies, list):
+        return []
+    return [p for p in proxies if isinstance(p, dict)]
+
+
+def _safe_load(text: str):
+    try:
+        return yaml.safe_load(text)
+    except Exception:
+        return None
 
 
 def extract_raw_urls_from_yaml(text: str) -> List[str]:

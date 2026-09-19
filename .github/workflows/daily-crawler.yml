@@ -80,7 +80,7 @@ jobs:
         run: |
           git pull --rebase --autostash || true
           git add output/state.db output/current output/latest || true
-          for f in sub_clash.txt sub_v2ray.txt sub_nodes.txt sub_telegram.txt; do if [ -f "$f" ]; then git add "$f"; fi; done || true
+          for f in sub_clash.txt sub_v2ray.txt sub_nodes.txt sub_telegram.txt sub_clash_sources.txt sub_v2ray_sources.txt; do if [ -f "$f" ]; then git add "$f"; fi; done || true
           if ! git diff --cached --quiet; then
             git commit -m "chore(subs): update subscriptions $(date -u +%Y-%m-%dT%H:%M:%SZ)"
             git push

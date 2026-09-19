@@ -135,6 +135,11 @@ def parse_ssr_url(u: str) -> Optional[Node]:
         return None
 
 
+def extract_node_uris(text: str) -> List[str]:
+    """从文本里抓出所有节点 URI 原文（含 #fragment 备注）。用于聚合输出。"""
+    return [m.group(0) for m in _PROTO_RE.finditer(text)]
+
+
 def parse_nodes(text: str) -> Tuple[List[Node], List[str]]:
     """返回 (nodes, raw_urls)。raw_urls 为与节点无关的裸露 https 订阅链接。"""
     nodes: List[Node] = []
