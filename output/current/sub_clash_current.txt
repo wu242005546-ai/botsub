@@ -1,5 +1,2 @@
-https://raw.githubusercontent.com/JYbill/mihomo-config-rules/main/deploy/template/proxies/index.yaml
-https://raw.githubusercontent.com/xcai413/fanqiang-navigation/master/free/proxies.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/fast/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/secure/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/clash.yaml
+https://raw.githubusercontent.com/1000ttank/free-vpn-clash-aggregator/main/output/clash.yaml
+https://raw.githubusercontent.com/jostar1101/free-clash-sub/main/clash-merged-clean.yaml
