@@ -1,32 +1,25 @@
 {
   "sub_clash.txt": {
-    "sources": 29,
-    "proxies_before_dedup": 7654,
-    "merged": 2000,
+    "sources": 2,
+    "proxies_before_dedup": 603,
+    "merged": 160,
     "truncated": true,
     "per_protocol": {
-      "vmess": 359,
-      "trojan": 129,
-      "vless": 905,
-      "hysteria2": 165,
-      "ss": 297,
-      "socks5": 8,
-      "http": 132,
-      "ssr": 2,
-      "anytls": 3
+      "vless": 124,
+      "hysteria2": 36
     }
   },
   "sub_v2ray.txt": {
-    "sources": 34,
-    "nodes_before_dedup": 13974,
+    "sources": 41,
+    "nodes_before_dedup": 37803,
     "merged": 2000,
     "truncated": true,
     "per_protocol": {
-      "vless": 1217,
-      "vmess": 360,
-      "trojan": 247,
-      "ss": 129,
-      "hysteria2": 47
+      "vless": 1174,
+      "trojan": 330,
+      "ss": 387,
+      "vmess": 80,
+      "hysteria2": 29
     }
   }
 }
