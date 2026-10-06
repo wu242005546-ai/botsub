@@ -1,9 +1,2 @@
-https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/mihomo-all.yaml
-https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/mihomo-bwl.yaml
-https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/mihomo-normal.yaml
-https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/uran-vpn-mihomo-all.yaml
-https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/uran-vpn-mihomo-bwl.yaml
-https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/uran-vpn-mihomo-normal.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/fast/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/secure/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/clash.yaml
+https://raw.githubusercontent.com/pornnewbee/free-vless-VPN/main/nodes/ms/az.yml
+https://raw.githubusercontent.com/sinahosseini379/Clash-config/main/clash.yaml
