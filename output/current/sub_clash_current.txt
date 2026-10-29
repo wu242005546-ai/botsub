@@ -1,14 +1,4 @@
-https://raw.githubusercontent.com/jostar1101/free-clash-sub/main/clash-merged-clean.yaml
-https://raw.githubusercontent.com/ovmvo/FreeSub/main/sub/latest/88570954.yaml
-https://raw.githubusercontent.com/ovmvo/FreeSub/main/sub/permanent/mihomo.yaml
-https://raw.githubusercontent.com/ovmvo/FreeSub/main/sub/raw/05.yaml
+https://raw.githubusercontent.com/Shayanthn/V2ray-Tester-Pro/main/subscriptions/clash.yaml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/Clash.yml
-https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ClashMeta.yml
-https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ShadowRocket.yml
-https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/mihomo.yml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/fast/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/secure/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/clash.yaml
-https://raw.githubusercontent.com/firefoxmmx2/v2rayshare_subcription/main/subscription/clash_sub.yaml
-https://raw.githubusercontent.com/peasoft/NoMoreWalls/master/snippets/nodes.meta.yml
-https://raw.githubusercontent.com/ovmvo/FreeSub/refs/heads/main/sub/raw/05.yaml
+https://raw.githubusercontent.com/xifan001-lab/clash-sub/main/clash.yaml
+https://raw.githubusercontent.com/zhuhaiuk/free-nodes/main/clash_config.yaml
