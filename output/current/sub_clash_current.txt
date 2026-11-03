@@ -1,10 +1,7 @@
-https://raw.githubusercontent.com/Surfboardv2ray/v2ray-worker-sub/master/Eternity.yml
-https://raw.githubusercontent.com/Surfboardv2ray/v2ray-worker-sub/master/update/provider/provider-all.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/Clash.yml
 https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/fast/clash.yaml
 https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/secure/clash.yaml
 https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/clash.yaml
-https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/subscribe/clash.yml
-https://raw.githubusercontent.com/anaer/Sub/main/clash.yaml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ClashMeta.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ShadowRocket.yml
+https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/mihomo.yml
