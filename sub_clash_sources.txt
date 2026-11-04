@@ -1,7 +1,16 @@
+https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/mihomo-all.yaml
+https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/mihomo-bwl.yaml
+https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/mihomo-normal.yaml
+https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/uran-vpn-mihomo-all.yaml
+https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/uran-vpn-mihomo-bwl.yaml
+https://raw.githubusercontent.com/UIRAN23/free-vpn-subscriptions/main/sub/uran-vpn-mihomo-normal.yaml
+https://raw.githubusercontent.com/ericyj23-pixel/clash-config/main/clash_config_2_lite.yaml
+https://raw.githubusercontent.com/ericyj23-pixel/clash-config/main/config.yaml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/Clash.yml
 https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/fast/clash.yaml
 https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/secure/clash.yaml
 https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/clash.yaml
+https://raw.githubusercontent.com/nodesfree/v2raynode/main/subscribe/clash.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ClashMeta.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ShadowRocket.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/mihomo.yml
