@@ -1,12 +1,4 @@
-https://raw.githubusercontent.com/sunmiao4458/free-proxy-airport/main/docs/clash.yaml
-https://raw.githubusercontent.com/sunmiao4458/free-proxy-airport/main/output/clash.yaml
-https://raw.githubusercontent.com/snakem982/proxypool/main/source/clash-meta-2.yaml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/Clash.yml
+https://raw.githubusercontent.com/zhuhaiuk/free-nodes/main/clash_config.yaml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ClashMeta.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ShadowRocket.yml
-https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/mihomo.yml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/fast/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/secure/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/clash.yaml
-https://raw.githubusercontent.com/nodesfree/clashnode/main/subscribe/clash.yaml
-https://raw.githubusercontent.com/nodesfree/clashnode/main/subscribe/clash.yml
