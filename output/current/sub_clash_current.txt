@@ -1,7 +1,14 @@
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/fast/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/secure/clash.yaml
-https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/clash.yaml
+https://raw.githubusercontent.com/free18/v2ray/main/c.yaml
+https://raw.githubusercontent.com/xiaohuozi248/free-node-config/main/clash.yaml
+https://raw.githubusercontent.com/ljc7441319/free-nodes/main/sub/clash.yaml
+https://raw.githubusercontent.com/ljc7441319/free-nodes/main/sub/clash.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/Clash.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ClashMeta.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ShadowRocket.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/mihomo.yml
+https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/fast/clash.yaml
+https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/secure/clash.yaml
+https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/verified/clash.yaml
+https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/subscribe/clash.yml
+https://raw.githubusercontent.com/ermaozi/get_subscribe/main/subscribe/clash.yml
+https://raw.githubusercontent.com/anaer/Sub/main/clash.yaml
