@@ -1,9 +1,8 @@
-https://raw.githubusercontent.com/Shayanthn/V2ray-Tester-Pro/main/subscriptions/clash.yaml
-https://raw.githubusercontent.com/jzrqs/node-subscribe/main/clash.yaml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/Clash.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ClashMeta.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ShadowRocket.yml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/mihomo.yml
+https://raw.githubusercontent.com/haiwanai/free-nodes/main/sub.yaml
 https://raw.githubusercontent.com/TelegaVPN/free-vpn-keys/main/sub/clash/all.yaml
 https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/fast/clash.yaml
 https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/google/clash.yaml
