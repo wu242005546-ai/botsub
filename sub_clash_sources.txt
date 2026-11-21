@@ -1,8 +1,9 @@
+https://raw.githubusercontent.com/xifan001-lab/clash-sub/main/clash.yaml
 https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/Clash.yml
-https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ClashMeta.yml
-https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ShadowRocket.yml
-https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/mihomo.yml
-https://raw.githubusercontent.com/TelegaVPN/free-vpn-keys/main/sub/clash/all.yaml
+https://raw.githubusercontent.com/lorenzazy7kenyon/free-vpn-subscriptions/main/output/by-country/clash-CA.yaml
+https://raw.githubusercontent.com/lorenzazy7kenyon/free-vpn-subscriptions/main/output/by-country/clash-CH.yaml
+https://raw.githubusercontent.com/lorenzazy7kenyon/free-vpn-subscriptions/main/output/by-country/clash-DE.yaml
+https://raw.githubusercontent.com/Leechuihui/FreeHarbor/main/clients/clash.yaml
 https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/Export/Clash/GLOBAL/BLACK_SS+All_RUS_clash_global.yaml
 https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/Export/Clash/GLOBAL/BLACK_VLESS_RUS_clash_global.yaml
 https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/Export/Clash/GLOBAL/BLACK_VLESS_RUS_mobile_clash_global.yaml
@@ -16,5 +17,7 @@ https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/Export/Cla
 https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/Export/Clash/RU_DIRECT/BLACK_SS+All_RUS_clash_rudirect.yaml
 https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/Export/Clash/RU_DIRECT/BLACK_VLESS_RUS_clash_rudirect.yaml
 https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/Export/Clash/RU_DIRECT/BLACK_VLESS_RUS_mobile_clash_rudirect.yaml
-https://raw.githubusercontent.com/looomix/Node-Configs/main/configs/clash/config.yaml
-https://raw.githubusercontent.com/looomix/Node-Configs/main/configs/clash/proxies.yaml
+https://raw.githubusercontent.com/lorenzazy7kenyon/free-vpn-subscriptions/main/output/by-country/clash-BY.yaml
+https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ClashMeta.yml
+https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/ShadowRocket.yml
+https://raw.githubusercontent.com/cbusifabcap/daily_free_vpn/main/sub/mihomo.yml
